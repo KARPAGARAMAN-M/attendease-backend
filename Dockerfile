@@ -1,12 +1,15 @@
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:26-jdk
 
 WORKDIR /app
 
-COPY . .
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
+RUN chmod +x mvnw && ./mvnw -q -DskipTests dependency:go-offline
 
-RUN chmod +x mvnw
-RUN ./mvnw clean package -DskipTests
+COPY src ./src
+
+RUN ./mvnw -q -DskipTests package
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "java -jar target/*.jar"]
+CMD ["sh", "-c", "java -Dserver.port=${PORT:-8080} -jar target/*.jar"]
