@@ -1,4 +1,4 @@
-FROM eclipse-temurin:26-jdk
+FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
@@ -10,6 +10,4 @@ COPY src ./src
 
 RUN ./mvnw -q -DskipTests package
 
-EXPOSE 8080
-
-CMD ["sh", "-c", "java -Dserver.port=${PORT:-8080} -jar target/*.jar"]
+CMD ["sh", "-c", "java -jar target/*.jar"]
